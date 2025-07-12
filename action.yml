@@ -15,6 +15,7 @@ runs:
         go-version-file: go.mod
     - name: Test with the Go CLI
       run: go test -v -coverprofile=coverage.out ./...
+      shell: bash
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
       with:
