@@ -1,6 +1,6 @@
 name: "TMS Go Test"
 description: "Run test and upload to codecov"
-input:
+inputs:
   codecov-token:
     description: 'codecov token'
     required: true
