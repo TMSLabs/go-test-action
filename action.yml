@@ -1,0 +1,22 @@
+name: "TMS Go Test"
+description: "Run test and upload to codecov"
+input:
+  codecov-token:
+    description: 'codecov token'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v4
+    - name: Setup Go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: go.mod
+    - name: Test with the Go CLI
+      run: go test -v -coverprofile=coverage.out ./...
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        files: coverage.out
+        token: ${{ inputs.codecov-token }}
