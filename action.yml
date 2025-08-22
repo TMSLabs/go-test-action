@@ -4,11 +4,19 @@ inputs:
   codecov-token:
     description: 'codecov token'
     required: true
+  github-token:
+    description: 'github token'
+    required: true
 
 runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v4
+    - name: "setup private repo access"
+      run: |
+        export GOPRIVATE=github.com/TemoMailerSolutions/*
+        git config --global url."https://${{ inputs.github-token }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+      shell: bash
     - name: Setup Go
       uses: actions/setup-go@v5
       with:
