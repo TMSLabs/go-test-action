@@ -12,18 +12,30 @@ runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v4
+    
     - name: "setup private repo access"
       run: |
         export GOPRIVATE=github.com/TemoMailerSolutions/*
         git config --global url."https://${{ inputs.github-token }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
       shell: bash
+      
     - name: Setup Go
       uses: actions/setup-go@v5
       with:
         go-version-file: go.mod
+      env:
+        GOPRIVATE: github.com/TemoMailerSolutions/*
+        GONOPROXY: github.com/TemoMailerSolutions/*
+        GONOSUMDB: github.com/TemoMailerSolutions/*
+        
     - name: Test with the Go CLI
       run: go test -v -coverprofile=coverage.out ./...
       shell: bash
+      env:
+        GOPRIVATE: github.com/TemoMailerSolutions/*
+        GONOPROXY: github.com/TemoMailerSolutions/*
+        GONOSUMDB: github.com/TemoMailerSolutions/*
+
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
       with:
