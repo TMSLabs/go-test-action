@@ -7,6 +7,10 @@ inputs:
   github-token:
     description: 'github token'
     required: true
+  templ:
+    description: 'Run templ build (optional)'
+    required: false
+    default: 'false'
 
 runs:
   using: "composite"
@@ -23,6 +27,14 @@ runs:
       uses: actions/setup-go@v5
       with:
         go-version-file: go.mod
+
+    - name: "templ lint"
+      if: ${{ inputs.templ == 'true' }}
+      run: |
+        templ_version=$(go list -m -f '{{.Version}}' github.com/a-h/templ)
+        go install github.com/a-h/templ/cmd/templ@${templ_version}
+        templ generate
+      shell: bash
         
     - name: Test with the Go CLI
       run: go test -v -coverprofile=coverage.out ./...
